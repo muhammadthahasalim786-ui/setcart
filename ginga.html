@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Next-Gen Enterprise E-Commerce Matrix Ecosystem</title>
+    <style>
+        /* =========================================================================
+           1. ROOT SYSTEM VARIABLES, CORE RESET & CSS ARCHITECTURE
+           ========================================================================= */
+        :root {
+            /* Color System - Light Mode Tokens (Flipkart Blue Matrix Inspired) */
+            --primary: #0af639;
+            --primary-dark: #1206f2;
+            --primary-glow: rgba(13, 13, 14, 0.15);
+            --secondary: #edde08;
+            --secondary-dark: #f39300;
+            --accent: #388e3c;
+            --bg-body: #f1f3f6;
+            --bg-surface: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --border-color: #e0e0e0;
+            --text-main: #212121;
+            --text-muted: #878787;
+            --text-inverse: #ffffff;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.15);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --font-stack: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        [data-theme="dark"] {
+            /* Color System - Dark Mode Overrides */
+            --primary: #4d8eff;
+            --primary-dark: #2874f0;
+            --primary-glow: rgba(77, 142, 255, 0.2);
+            --secondary: #ffb74d;
+            --secondary-dark: #ff9f00;
+            --accent: #4caf50;
+            --bg-body: #0c111a;
+            --bg-surface: #16222f;
+            --bg-glass: rgba(22, 34, 47, 0.75);
+            --border-color: #2b3e55;
+            --text-main: #f5f6f9;
+            --text-muted: #9fa8b3;
+            --text-inverse: #0c111a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.25);
+            --shadow-md: 0 6px 16px rgba(0,0,0,0.35);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg-body);
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        li { list-style: none; }
+
+        /* Custom Scrollbar Engine */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+        /* Helper Classes for Clean Layout Orchestration */
+        .container-master { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 24px; }
+        .glass-panel { background: var(--bg-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-color); }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+
+        /* =========================================================================
+           2. SECURITY SYSTEM & HIGH-SECURITY WALL INTERFACE (GATEWAY 8075)
+           ========================================================================= */
+        #security-matrix-wall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #111e30 0%, #050a12 100%);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-stack);
+            color: #ffffff;
+            transition: opacity 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s;
+        }
+
+        .lock-container-frame {
+            background: rgba(12, 22, 38, 0.65);
+            border: 1px solid rgba(40, 116, 240, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 40px rgba(40, 116, 240, 0.1) inset;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lock-container-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(40, 116, 240, 0.4), transparent 40%);
+            animation: radar-sweep 6s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .lock-inner-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .lock-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), #00d2ff);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            font-size: 2.2rem;
+            box-shadow: 0 0 24px rgba(40, 116, 240, 0.6);
+            animation: floating-lock 3s ease-in-out infinite;
+        }
+
+        .security-title-chain {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ffffff, #8dafff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .security-subtitle-chain {
+            font-size: 0.85rem;
+            color: #708aa6;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .passcode-input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .passcode-input-node {
+            width: 100%;
+            background: rgba(5, 10, 18, 0.8);
+            border: 2px solid rgba(77, 142, 255, 0.2);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-align: center;
+            letter-spacing: 12px;
+            outline: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .passcode-input-node:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 16px rgba(40, 116, 240, 0.4);
+            background: rgba(5, 10, 18, 0.95);
+        }
+
+        .security-submit-trigger {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(40, 116, 240, 0.3);
+        }
+
+        .security-submit-trigger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 116, 240, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .security-submit-trigger:active {
+            transform: translateY(0);
+        }
+
+        .security-error-toast {
+            color: #ff4d4d;
+            font-size: 0.9rem;
+            margin-top: 16px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .security-error-toast.triggered {
+            opacity: 1;
+            transform: translateY(0);
+            animation: shake-error 0.4s ease-in-out;
+        }
+
+        /* Fake Quantum System Loader Overlay */
+        .quantum-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050a12;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .quantum-loading-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .spinner-ring-sector {
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            border-bottom-color: var(--secondary);
+            border-radius: 50%;
+            animation: system-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .quantum-loading-text {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #708aa6;
+            animation: pulsing-text 1.5s ease-in-out infinite;
+        }
+
+        /* Keyframe Matrix For Security Component */
+        @keyframes radar-sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes floating-lock {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes system-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulsing-text {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        @keyframes shake-error {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        /* =========================================================================
+           3. MASTER BACKDROP PARTICLE INTERACTION CANVAS
+           ========================================================================= */
+        #ambient-particle-space {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        /* =========================================================================
+           4. GLOBAL MASTER APPLICATION CONTAINER LAYOUT
+           ========================================================================= */
+        #master-application-ecosystem {
+            display: none; /* Regulated cleanly by security validation checks */
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Global Structural Scroll Progress Framework Tracker */
+        #global-scroll-progress-wire {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: 10000;
+            transition: width 0.1s linear;
+        }
+
+        /* Custom Dynamic Cursor Engine Tracking Component styling */
+        #dynamic-hardware-cursor {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 999999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        #dynamic-hardware-cursor-halo {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 999998;
+            transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s;
+        }
+
+        /* =========================================================================
+           5. GLOBAL TOP STICKY NAVIGATION CONTROLLER LAYOUT
+           ========================================================================= */
+        .nexus-navigation-hub {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 2000;
+            background-color: var(--primary);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-md);
+            padding: 12px 0;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .navigation-dock-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+        }
+
+        .brand-logo-cluster {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .brand-logo-main {
+            font-size: 1.6rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .brand-logo-main span {
+            color: var(--secondary);
+            font-weight: 900;
+        }
+
+        .brand-logo-subtext {
+            font-size: 0.7rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.85);
+            margin-top: -2px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .brand-logo-subtext strong {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        /* Central Omnisearch Computational Input Deck */
+        .omnisearch-deck-wrapper {
+            flex: 1;
+            max-width: 650px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .omnisearch-input-node {
+            width: 100%;
+            padding: 12px 48px 12px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            background-color: #ffffff;
+            color: #212121;
+            outline: none;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .omnisearch-input-node:focus {
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        }
+
+        .omnisearch-action-buttons {
+            position: absolute;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .omnisearch-icon-btn {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .omnisearch-icon-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* Voice Input Active Micro-Animation Visualizer */
+        .voice-pulse-tracker-node {
+            width: 8px;
+            height: 8px;
+            background-color: #ff4d4d;
+            border-radius: 50%;
+            position: absolute;
+            right: -4px;
+            top: -4px;
+            display: none;
+            animation: structural-ping 1s ease-in-out infinite;
+        }
+
+        @keyframes structural-ping {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.4); opacity: 0; }
+        }
+
+        /* Dynamic Query Autocomplete Context List Panel */
+        .omnisearch-autocomplete-panel {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            max-height: 350px;
+            overflow-y: auto;
+            display: none;
+            z-index: 2500;
+        }
+
+        .autocomplete-row-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .autocomplete-row-item:hover {
+            background-color: var(--bg-body);
+        }
+
+        /* Interactive Navigation Utility Functional Actions */
+        .navigation-utilities-cluster {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .identity-dropdown-anchor {
+            background-color: #ffffff;
+            color: var(--primary);
+            padding: 8px 24px;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .identity-dropdown-anchor:hover {
+            background-color: var(--bg-body);
+        }
+
+        .utility-icon-link-node {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .utility-icon-link-node:hover {
+            transform: translateY(-2px);
+        }
+
+        .utility-badge-counter {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 900;
+            border: 2px solid var(--primary);
+        }
+
+        /* Identity Portal Hover Matrix Menu Sheet */
+        .identity-context-menu-sheet {
+            position: absolute;
+            top: 130%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 240px;
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 2200;
+            overflow: hidden;
+        }
+
+        .identity-dropdown-anchor:hover .identity-context-menu-sheet {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .context-menu-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .context-menu-nav-link:hover {
+            background-color: var(--bg-body);
+            color: var(--primary);
+        }
+
+        /* Modern Skin Modulation Mode Toggle System CSS */
+        .theme-toggle-switch {
+            width: 48px;
+            height: 24px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle-knob {
+            width: 18px;
+            height: 18px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        [data-theme="dark"] .theme-toggle-switch {
+            background-color: var(--secondary);
+        }
+
+        [data-theme="dark"] .theme-toggle-knob {
+            transform: translateX(24px);
+        }
+
+        /* =========================================================================
+           6. SUB-NAVIGATION STRUCTURAL HIGH-VOLUME CATEGORY STRIP
+           ========================================================================= */
+        .category-strip-hub {
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        .category-strip-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 900px;
+        }
+
+        .category-strip-node-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .category-strip-node-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-strip-node-item:hover span {
+            color: var(--primary);
+        }
+
+        .category-node-img-mask {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--bg-body);
+            border: 2px solid transparent;
+            transition: var(--transition-smooth);
+        }
+
+        .category-strip-node-item:hover .category-node-img-mask {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-node-img-mask img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-strip-node-item span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="security-matrix-wall">
+        <div class="lock-container-frame">
+            <div class="lock-inner-content">
+                <div class="lock-icon-wrapper flex-center">🔒</div>
+                <h1 class="security-title-chain">Ecosystem Lock</h1>
+                <p class="security-subtitle-chain">Nexus Deployment Verification</p>
+                
+                <div class="passcode-input-group">
+                    <input type="password" id="gatekeeper-passcode-field" class="passcode-input-node" maxlength="4" placeholder="••••" autocomplete="off">
+                </div>
+                
+                <button type="button" class="security-submit-trigger" onclick="authenticateSecurityPasscodeGateway()">Establish Handshake</button>
+                <div id="gatekeeper-error-log" class="security-error-toast">Invalid Access Protocol Token</div>
+            </div>
+
+            <div id="gatekeeper-loading-curtain" class="quantum-loading-overlay">
+                <div class="spinner-ring-sector"></div>
+                <div class="quantum-loading-text">Synchronizing Nexus Ledger...</div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="ambient-particle-space"></canvas>
+
+    <div id="global-scroll-progress-wire"></div>
+
+    <div id="dynamic-hardware-cursor"></div>
+    <div id="dynamic-hardware-cursor-halo"></div>
+
+    <main id="master-application-ecosystem">
+        
+        <header class="nexus-navigation-hub">
+            <div class="container-master navigation-dock-row">
+                
+                <div class="brand-logo-cluster" onclick="routeToTargetTab('home-view-perspective')">
+                    <div class="brand-logo-main">NEXUS<span>+</span></div>
+                    <div class="brand-logo-subtext">Explore <strong>Quantum</strong></div>
+                </div>
+
+                <div class="omnisearch-deck-wrapper">
+                    <input type="text" id="omnisearch-primary-input" class="omnisearch-input-node" placeholder="Scan assets, computational platforms, consumer nodes..." oninput="evaluateOmnisearchInputSequence(this.value)">
+                    <div class="omnisearch-action-buttons">
+                        <span class="omnisearch-icon-btn" onclick="triggerVoiceAssistanceCaptureMode()">🎙️<div id="voice-pulse-node" class="voice-pulse-tracker-node"></div></span>
+                        <span class="omnisearch-icon-btn">🔍</span>
+                    </div>
+                    <div id="omnisearch-autocomplete-results" class="omnisearch-autocomplete-panel"></div>
+                </div>
+
+                <nav class="navigation-utilities-cluster">
+                    <div class="identity-dropdown-anchor">
+                        Identity Hub
+                        <div class="identity-context-menu-sheet">
+                            <a href="#" class="context-menu-nav-link" onclick="togglePortalModalMask('auth-portal-dialog', true)">🔐 Portal Sign In</a>
+                            <a href="#" class="context-menu-nav-link" onclick="togglePortalModalMask('seller-admin-dashboard-modal', true)">📊 Seller Operations</a>
+                            <a href="#" class="context-menu-nav-link" onclick="routeToTargetTab('order-history-perspective')">📦 Shipping Ledgers</a>
+                            <a href="#" class="context-menu-nav-link" onclick="routeToTargetTab('notification-center-perspective')">🔔 Intel Matrix</a>
+                        </div>
+                    </div>
+                    
+                    <div class="utility-icon-link-node" onclick="routeToTargetTab('wishlist-display-perspective')">
+                        <span>❤️</span> Wishlist
+                        <span id="wishlist-badge-tracker" class="utility-badge-counter">0</span>
+                    </div>
+
+                    <div class="utility-icon-link-node" onclick="toggleCartPanelSlideout(true)">
+                        <span>🛒</span> Registry
+                        <span id="cart-badge-tracker" class="utility-badge-counter">0</span>
+                    </div>
+
+                    <div class="theme-toggle-switch" onclick="executeThemeInterfaceSkinShift()">
+                        <div class="theme-toggle-knob"></div>
+                    </div>
+                    
+                    <div class="utility-icon-link-node hamburger-mobile-toggle" onclick="toggleMobileDrawerMenu(true)" style="display:none; font-size:1.5rem;">☰</div>
+                </nav>
+
+            </div>
+        </header>
+
+        <nav class="category-strip-hub">
+            <div class="container-master category-strip-container">
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('all')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=150&auto=format&fit=crop&q=60" alt="All"></div>
+                    <span>All Sectors</span>
+                </div>
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('mobiles')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=150&auto=format&fit=crop&q=60" alt="Mobiles"></div>
+                    <span>Mobiles</span>
+                </div>
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('computing')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1496181130204-7552cc1524e2?w=150&auto=format&fit=crop&q=60" alt="Computing"></div>
+                    <span>Computing</span>
+                </div>
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('audio')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&auto=format&fit=crop&q=60" alt="Audio"></div>
+                    <span>Audio Node</span>
+                </div>
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('appliances')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=150&auto=format&fit=crop&q=60" alt="Appliances"></div>
+                    <span>Appliances</span>
+                </div>
+                <div class="category-strip-node-item" onclick="executeProductInventoryFilter('fashion')">
+                    <div class="category-node-img-mask"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=150&auto=format&fit=crop&q=60" alt="Fashion"></div>
+                    <span>Fashion Core</span>
+                </div>
+            </div>
+        </nav>
+        
+        <style>
+            /* =========================================================================
+               7. HOMEPAGE SYSTEM VIEW PERSPECTIVE LAYOUT
+               ========================================================================= */
+            .perspective-view-tab { display: none; min-height: 80vh; animation: fadeInView 0.4s ease forwards; }
+            .perspective-view-tab.active-view { display: block; }
+            @keyframes fadeInView { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+            /* Advanced Dynamic Hero Carousel Deck */
+            .hero-carousel-deck { position: relative; width: 100%; height: 460px; background-color: #050a12; overflow: hidden; margin-bottom: 32px; box-shadow: var(--shadow-md); }
+            .carousel-track-wrapper { display: flex; width: 300%; height: 100%; transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1); }
+            .carousel-slide-pane { width: 33.3333%; height: 100%; position: relative; display: flex; align-items: center; justify-content: flex-start; padding: 0 80px; box-sizing: border-box; }
+            .carousel-slide-bg-media { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.4; z-index: 1; filter: blur(2px); }
+            .carousel-slide-content { position: relative; z-index: 5; max-width: 600px; color: #ffffff; }
+            .carousel-slide-content h2 { font-size: 3rem; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+            .carousel-slide-content p { font-size: 1.1rem; margin-bottom: 24px; color: rgba(255,255,255,0.85); line-height: 1.6; }
+            
+            /* Action call trigger buttons */
+            .action-trigger-btn { display: inline-block; padding: 14px 32px; font-weight: 700; border-radius: var(--radius-sm); text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition-smooth); border: none; }
+            .action-primary { background-color: var(--secondary); color: #ffffff; box-shadow: 0 4px 14px rgba(255,159,0,0.4); }
+            .action-primary:hover { background-color: var(--secondary-dark); transform: translateY(-2px); }
+
+            /* Grid Configuration For Dynamic Merchandising Sections */
+            .section-grid-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+            .section-grid-header h3 { font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .section-grid-header h3 span { color: var(--primary); }
+
+            .product-showcase-matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin-bottom: 48px; }
+            
+            /* Advanced Product Card UI Architecture */
+            .product-card-core { background-color: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border-color); position: relative; overflow: hidden; transition: var(--transition-smooth); display: flex; flex-direction: column; height: 420px; box-shadow: var(--shadow-sm); }
+            .product-card-core:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+            
+            /* Card Element Slots */
+            .product-card-media-slot { height: 220px; position: relative; background-color: #ffffff; padding: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+            .product-card-media-slot img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+            .product-card-core:hover .product-card-media-slot img { transform: scale(1.06); }
+            
+            .card-badge-discount { position: absolute; top: 12px; left: 12px; background-color: var(--accent); color: white; padding: 4px 8px; font-size: 0.75rem; font-weight: 800; border-radius: var(--radius-sm); z-index: 10; }
+            .card-action-wishlist-toggle { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface); box-shadow: var(--shadow-sm); cursor: pointer; font-size: 1.1rem; z-index: 10; border: 1px solid var(--border-color); transition: background-color 0.2s; }
+            .card-action-wishlist-toggle:hover { background-color: #ffeded; border-color: #ffb3b3; }
+
+            .product-card-info-slot { padding: 16px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.02)); }
+            .product-title-node { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+            .product-description-node { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            
+            .product-rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+            .rating-pill-green { background-color: var(--accent); color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 2px; }
+            .rating-count-text { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+            .product-pricing-row { display: flex; align-items: baseline; gap: 8px; }
+            .price-current-tag { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+            .price-original-tag { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; }
+            .price-discount-tag { font-size: 0.85rem; color: var(--accent); font-weight: 700; }
+
+            .product-card-action-deck { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; background-color: var(--bg-surface); }
+            .card-btn-secondary { background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; font-weight: 700; font-size: 0.8rem; border-radius: var(--radius-sm); cursor: pointer; text-align: center; text-transform: uppercase; transition: var(--transition-smooth); }
+            .card-btn-secondary:hover { background: var(--border-color); }
+            .card-btn-primary { background: var(--primary); color: white; border: none; padding: 8px; font-weight: 700; font-size: 0.8rem; border-radius: var(--radius-sm); cursor: pointer; text-align: center; text-transform: uppercase; transition: var(--transition-smooth); }
+            .card-btn-primary:hover { background: var(--primary-dark); }
+        </style>
+
+        <div id="home-view-perspective" class="perspective-view-tab active-view">
+            
+            <section class="hero-carousel-deck">
+                <div id="hero-carousel-slider-track" class="carousel-track-wrapper">
+                    <div class="carousel-slide-pane">
+                        <img class="carousel-slide-bg-media" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80" alt="Slide 1">
+                        <div class="carousel-slide-content">
+                            <h2>Quantum Compute Architecture</h2>
+                            <p>Unlock extreme data processing performance arrays with specialized silicon nodes. Groundbreaking latency profiles ready for immediate pipeline attachment.</p>
+                            <button class="action-trigger-btn action-primary" onclick="executeProductInventoryFilter('computing')">Initialize Scan</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide-pane">
+                        <img class="carousel-slide-bg-media" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200&auto=format&fit=crop&q=80" alt="Slide 2">
+                        <div class="carousel-slide-content">
+                            <h2>Symmetric Handheld Nodes</h2>
+                            <p>Experience seamless high-frequency radio grid operations paired with internal hardware security matrices. Designed for tactical deployment data integrity.</p>
+                            <button class="action-trigger-btn action-primary" onclick="executeProductInventoryFilter('mobiles')">Acquire Asset</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide-pane">
+                        <img class="carousel-slide-bg-media" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&auto=format&fit=crop&q=80" alt="Slide 3">
+                        <div class="carousel-slide-content">
+                            <h2>Structural Poly-Weave Matrix</h2>
+                            <p>Industrial performance wear built with cross-linked polymer fabrics. Heat dispersion stabilization systems integrated into every fiber layer.</p>
+                            <button class="action-trigger-btn action-primary" onclick="executeProductInventoryFilter('fashion')">Review Specs</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="container-master">
+                
+                <div class="section-grid-header">
+                    <h3>⚡ High-Velocity <span>Asset Allocations</span></h3>
+                    <div style="font-size:0.9rem; font-weight:700; color:var(--primary); cursor:pointer;">View Entire Matrix →</div>
+                </div>
+                
+                <div id="primary-product-injection-matrix" class="product-showcase-matrix">
+                    </div>
+
+            </section>
+        </div>
+
+        <div id="wishlist-display-perspective" class="perspective-view-tab">
+            <section class="container-master" style="padding: 40px 24px;">
+                <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:24px; text-transform:uppercase;">❤️ Personal Asset <span>Hold Tank</span></h2>
+                <div id="wishlist-injection-matrix" class="product-showcase-matrix">
+                    </div>
+            </section>
+        </div>
+
+        <div id="order-history-perspective" class="perspective-view-tab">
+            <section class="container-master" style="padding: 40px 24px; max-width: 900px;">
+                <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:24px; text-transform:uppercase;">📦 Historical <span>Logistics Ledger</span></h2>
+                <div id="shipping-ledger-injection-target" style="display:flex; flex-direction:column; gap:16px;">
+                    </div>
+            </section>
+        </div>
+
+        <div id="notification-center-perspective" class="perspective-view-tab">
+            <section class="container-master" style="padding: 40px 24px; max-width: 800px;">
+                <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:24px; text-transform:uppercase;">🔔 Central <span>Intel Matrix Feed</span></h2>
+                <div style="background-color:var(--bg-surface); border-radius:var(--radius-md); border:1px solid var(--border-color); padding:24px;">
+                    <div style="padding:16px; border-left:4px solid var(--primary); background:var(--bg-body); margin-bottom:12px; font-weight:600;">
+                        [SYSTEM LOG] Core checkout processing framework updated cleanly to standard protocol 4.9.
+                    </div>
+                    <div style="padding:16px; border-left:4px solid var(--secondary); background:var(--bg-body); margin-bottom:12px; font-weight:600;">
+                        [PROMO BROADCAST] Dynamic coupon code "NEXTGEN10" compiled and attached successfully to active session.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <style>
+        /* =========================================================================
+           4. GLOBAL LAYOUT FLOATING INTERACTION SLIDE-OUT SHEETS (CART & QUICKVIEW)
+           ========================================================================= */
+        .cart-panel-slideout-wrapper { position: fixed; top: 0; right: -450px; width: 450px; height: 100vh; background-color: var(--bg-surface); border-left: 1px solid var(--border-color); box-shadow: var(--shadow-lg); z-index: 4000; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
+        .cart-panel-slideout-wrapper.active-slideout { right: 0; }
+        
+        .cart-panel-header { padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background-color: var(--primary); color: white; }
+        .cart-panel-body { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        
+        .cart-row-item { display: flex; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; align-items: center; }
+        .cart-row-img-mask { width: 70px; height: 70px; object-fit: contain; background: white; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 4px; }
+        .cart-row-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .cart-row-title { font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
+        .cart-row-price { font-size: 1rem; font-weight: 800; color: var(--primary); }
+        
+        .cart-quantity-manipulator { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+        .quantity-adjust-trigger { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .quantity-display-node { font-size: 0.9rem; font-weight: 700; width: 24px; text-align: center; }
+
+        .cart-panel-footer-summary { padding: 24px; border-top: 1px solid var(--border-color); background-color: var(--bg-body); display: flex; flex-direction: column; gap: 12px; }
+        .summary-data-line { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; }
+        .summary-total-bold { font-size: 1.2rem; font-weight: 900; color: var(--text-main); border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 4px; }
+
+        /* Dialog Portal Backdrop Overlay System Mask */
+        .portal-modal-mask { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 5000; display: none; align-items: center; justify-content: center; }
+        .modal-dialog-box { background-color: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border-color); width: 100%; max-width: 650px; box-shadow: var(--shadow-lg); overflow: hidden; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes modalPop { from { transform: scale(0.9) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+        /* Quickview Complex Display Matrix styling */
+        .quickview-layout-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        .quickview-image-anchor { background: white; display: flex; align-items: center; justify-content: center; padding: 32px; position: relative; overflow: hidden; }
+        .quickview-image-anchor img { max-width: 100%; max-height: 280px; object-fit: contain; transition: transform 0.1s ease; }
+        .quickview-details-panel { padding: 32px; display: flex; flex-direction: column; justify-content: space-between; }
+    </style>
+
+    <div id="cart-panel-slideout" class="cart-panel-slideout-wrapper">
+        <div class="cart-panel-header">
+            <h3 style="font-weight: 800; font-style: italic;">📦 Assets Core Cache</h3>
+            <span style="font-size: 1.4rem; cursor: pointer;" onclick="toggleCartPanelSlideout(false)">✕</span>
+        </div>
+        <div id="cart-injection-body-target" class="cart-panel-body">
+            </div>
+        <div class="cart-panel-footer-summary">
+            <div class="summary-data-line"><span>Ecosystem Raw Base:</span><span id="cart-summary-gross-val">₹0</span></div>
+            <div class="summary-data-line"><span>System Routing Discount:</span><span style="color:var(--accent);">-₹250</span></div>
+            <div class="summary-data-line summary-total-bold"><span>Net Valuation Sum:</span><span id="cart-summary-net-val">₹0</span></div>
+            <button class="action-trigger-btn action-primary" style="width:100%; text-align:center; margin-top:12px;" onclick="executeSimulatedCheckoutRoutine()">Compile Checkout Pipeline</button>
+        </div>
+    </div>
+
+    <div id="portal-modal-backdrop-mask" class="portal-modal-mask" onclick="dismissAllActiveModals(event)">
+        
+        <div id="product-quick-view-dialog" class="modal-dialog-box" style="display:none;">
+            <div id="quickview-injection-anchor" class="quickview-layout-grid">
+                </div>
+        </div>
+
+        <div id="auth-portal-dialog" class="modal-dialog-box" style="display:none; max-width: 400px; padding: 32px;">
+            <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:20px; text-transform:uppercase;">🔐 Secure <span>Token Entrance</span></h3>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+                <input type="text" placeholder="Identity Matrix E-Mail Reference" style="width:100%; padding:12px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); border-radius:var(--radius-sm);">
+                <input type="password" placeholder="Passphrase Secret Access Ring" style="width:100%; padding:12px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); border-radius:var(--radius-sm);">
+                <button class="action-trigger-btn action-primary" style="width:100%;" onclick="togglePortalModalMask('auth-portal-dialog', false); dispatchToastNotification('Identity Verified Safely.');">Validate Cryptographic Token</button>
+            </div>
+        </div>
+
+        <div id="seller-admin-dashboard-modal" class="modal-dialog-box" style="display:none; max-width: 900px; padding: 32px;">
+            <h3 style="font-size:1.5rem; font-weight:800; margin-bottom:24px; text-transform:uppercase;">📊 Enterprise <span>Ecosystem Diagnostics Monitor</span></h3>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:32px;">
+                <div style="background:var(--bg-body); padding:20px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Gross Core Volume (24h)</div>
+                    <div style="font-size:1.8rem; font-weight:900; color:var(--primary); margin-top:4px;">₹14,92,400</div>
+                </div>
+                <div style="background:var(--bg-body); padding:20px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Active Pipeline Handshakes</div>
+                    <div style="font-size:1.8rem; font-weight:900; color:var(--accent); margin-top:4px;">8,291 / sec</div>
+                </div>
+                <div style="background:var(--bg-body); padding:20px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Ecosystem System Status</div>
+                    <div style="font-size:1.2rem; font-weight:900; color:white; background:var(--accent); display:inline-block; padding:4px 12px; border-radius:20px; margin-top:8px;">OPTIMAL</div>
+                </div>
+            </div>
+            <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; text-transform:uppercase;">Product Injection Control Matrix</h4>
+            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem;">
+                <thead>
+                    <tr style="background:var(--bg-body); border-bottom:2px solid var(--border-color);">
+                        <th style="padding:12px;">Asset Identification ID</th>
+                        <th style="padding:12px;">Descriptive Descriptor Designation</th>
+                        <th style="padding:12px;">Metric Cost Rate</th>
+                        <th style="padding:12px;">Ecosystem Registry Action</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-panel-table-body-rows">
+                    </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <style>
+        /* =========================================================================
+           5. SYSTEM NOTIFICATION TOAST OVERLAY AND COMPONENT FLOATING ASSETS
+           ========================================================================= */
+        #global-toast-notification-hub { position: fixed; bottom: 32px; left: 32px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
+        .toast-notification-node { background-color: #111e30; color: #ffffff; padding: 16px 28px; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 700; box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary); display: flex; align-items: center; gap: 12px; transform: translateX(-150%); animation: slideToastIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+        @keyframes slideToastIn { to { transform: translateX(0); } }
+        
+        /* Floating Action Intelligence Assistant Hub Window */
+        #ai-assistant-hud-window { position: fixed; bottom: 32px; right: 32px; width: 360px; height: 500px; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); z-index: 3500; display: none; flex-direction: column; overflow: hidden; animation: modalPop 0.4s ease forwards; }
+        .ai-assistant-hud-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 20px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; }
+        .ai-assistant-hud-logs { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: var(--bg-body); }
+        .ai-log-bubble { padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; line-height: 1.4; max-width: 85%; }
+        .ai-bubble-incoming { background-color: var(--bg-surface); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 0; box-shadow: var(--shadow-sm); }
+        .ai-bubble-outgoing { background-color: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 0; }
+        
+        .ai-assistant-hud-input-dock { padding: 12px; border-top: 1px solid var(--border-color); display: flex; gap: 8px; background-color: var(--bg-surface); }
+        .ai-assistant-hud-input-dock input { flex:1; padding:10px 14px; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.85rem; outline:none; background:var(--bg-body); color:var(--text-main); }
+
+        /* Floating Absolute UI Anchor Triggers */
+        .floating-trigger-absolute-anchor { position: fixed; bottom: 32px; right: 32px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #00d2ff 100%); color: white; font-size: 1.6rem; cursor: pointer; box-shadow: 0 8px 24px rgba(40, 116, 240, 0.4); z-index: 3000; transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .floating-trigger-absolute-anchor:hover { transform: scale(1.1) rotate(10deg); }
+    </style>
+
+    <div id="global-toast-notification-hub"></div>
+
+    <div id="ai-assistant-hud-window">
+        <div class="ai-assistant-hud-header">
+            <span>🤖 Nexus Deep-Logic Node</span>
+            <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleAIAssistantHUDDisplay(false)">✕</span>
+        </div>
+        <div id="ai-assistant-hud-logs-target" class="ai-assistant-hud-logs">
+            <div class="ai-log-bubble ai-bubble-incoming">System diagnostic stable. Automated asset discovery routines active. Enter telemetry parameters below or probe inventory sectors.</div>
+        </div>
+        <div class="ai-assistant-hud-input-dock">
+            <input type="text" id="ai-assistant-hud-raw-input" placeholder="Query semantic models..." onkeypress="if(event.key==='Enter') executeAIAssistantComputationalQuery()">
+            <button style="background:var(--primary); border:none; color:white; padding:0 16px; border-radius:var(--radius-sm); font-weight:700; cursor:pointer;" onclick="executeAIAssistantComputationalQuery()">EXEC</button>
+        </div>
+    </div>
+
+    <button id="ai-assistant-floating-absolute-trigger" class="floating-trigger-absolute-anchor flex-center" onclick="toggleAIAssistantHUDDisplay(true)">🤖</button>
+
+    <style>
+        /* =========================================================================
+           14. RICH DENSE SYSTEM ARCHITECTURE MULTI-COLUMN SECTOR FOOTER
+           ========================================================================= */
+        .nexus-multi-column-footer {
+            background-color: #111e30;
+            color: #ffffff;
+            padding: 64px 0 32px;
+            margin-top: 80px;
+            font-size: 0.85rem;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-layout-grid-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .footer-column-block h5 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+
+        .footer-column-block ul {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-column-block ul li a {
+            color: #a0aec0;
+            transition: color 0.2s ease, transform 0.2s ease;
+            display: inline-block;
+        }
+
+        .footer-column-block ul li a:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .footer-newsletter-dock input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #050a12;
+            border: 1px solid #2b3e55;
+            color: white;
+            border-radius: var(--radius-sm);
+            outline: none;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+
+        .footer-closure-row {
+            border-top: 1px solid #2b3e55;
+            padding-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        
+        /* Accordion component styles */
+        .accordion-group-wrapper { max-width: 900px; margin: 64px auto; padding: 0 24px; }
+        .accordion-node-card { background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 12px; overflow: hidden; }
+        .accordion-node-trigger { padding: 20px; font-weight: 700; color: var(--text-main); cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, transparent, rgba(0,0,0,0.01)); }
+        .accordion-node-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.3s ease; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .accordion-node-card.expanded .accordion-node-body { padding: 0 20px 20px; max-height: 200px; }
+    </style>
+
+    <section class="accordion-group-wrapper">
+        <h2 style="text-align:center; font-size:1.8rem; font-weight:800; margin-bottom:32px; text-transform:uppercase;">💬 Ecosystem Operational <span>Knowledge Base</span></h2>
+        <div class="accordion-node-card" onclick="toggleAccordionNodeInstance(this)">
+            <div class="accordion-node-trigger"><span>How are data processing parameters evaluated on hardware shipments?</span><span>▼</span></div>
+            <div class="accordion-node-body">All logic array nodes run rigorous internal integrity confirmation scripts before asset assignment validation certificates lock cleanly into your deployment history feed folder.</div>
+        </div>
+        <div class="accordion-node-card" onclick="toggleAccordionNodeInstance(this)">
+            <div class="accordion-node-trigger"><span>What protocol handles verification errors during checkout routing execution passes?</span><span>▼</span></div>
+            <div class="accordion-node-body">If synchronization checks bounce inside checkout blocks, automated data rolls reset localized memory cache targets seamlessly back to standard reference values to avoid loss vectors.</div>
+        </div>
+    </section>
+
+    <footer class="nexus-multi-column-footer">
+        <div class="container-master footer-layout-grid-matrix">
+            <div class="footer-column-block">
+                <h5>Ecosystem Sectors</h5>
+                <ul>
+                    <li><a href="#" onclick="executeProductInventoryFilter('mobiles')">Mobile Operations Telemetry</a></li>
+                    <li><a href="#" onclick="executeProductInventoryFilter('computing')">High-Density Compute Towers</a></li>
+                    <li><a href="#" onclick="executeProductInventoryFilter('audio')">Acoustic Sound Field Arrays</a></li>
+                    <li><a href="#" onclick="executeProductInventoryFilter('appliances')">Thermodynamic Exchange Machinery</a></li>
+                </ul>
+            </div>
+            <div class="footer-column-block">
+                <h5>Governance Directives</h5>
+                <ul>
+                    <li><a href="#">Cryptographic Data Rules</a></li>
+                    <li><a href="#">Node Tracking Routing Paths</a></li>
+                    <li><a href="#">Asset Transaction Reductions</a></li>
+                    <li><a href="#">System Integrity Code Manifest</a></li>
+                </ul>
+            </div>
+            <div class="footer-column-block">
+                <h5>Corporate Engine</h5>
+                <ul>
+                    <li><a href="#">Logic Development Laboratories</a></li>
+                    <li><a href="#">Infrastructure Scalability Careers</a></li>
+                    <li><a href="#">Ecosystem Press Communication Feed</a></li>
+                    <li><a href="#">System Security Audit Logs</a></li>
+                </ul>
+            </div>
+            <div class="footer-column-block">
+                <h5>Telemetry Subscriptions</h5>
+                <div class="footer-newsletter-dock">
+                    <input type="email" placeholder="Register core network address...">
+                    <button class="action-trigger-btn action-primary" style="padding:10px 20px; font-size:0.75rem; width:100%;" onclick="dispatchToastNotification('Network Address Synced Safely to Core Feed.')">Establish Stream Link</button>
+                </div>
+            </div>
+        </div>
+        <div class="container-master footer-closure-row">
+            <span>© 2026 NEXUS Systems International Architecture Matrix. Real-Time High-Fidelity Single-File E-Commerce Prototype Engine. All infrastructure channels fully synchronized.</span>
+            <span>Ref Verification Mode Protocol: v9.422.8075</span>
+        </div>
+    </footer>
+
+    <script>
+        /* =========================================================================
+           GLOBAL HIGH-CAPACITY MASTER INVENTORY APPLICATION DATABASE
+           ========================================================================= */
+        const MASTER_INVENTORY_DB = {
+            products: [
+                { id: 101, category: 'mobiles', title: 'Quantum Phone X-1 Alpha', currentPrice: 74999, originalPrice: 89999, rating: 4.8, ratingCount: '8,421', discount: '16% off', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60', desc: 'Next-gen silicon processing hub containing dedicated quantum cryptographic data arrays.', details: 'Processor: Core Silicon Alpha 9 | Display: 6.7" Fluid Holographic Array | Cell Battery: 5500mAh' },
+                { id: 102, category: 'computing', title: 'AeroBook Pro Compute Tower', currentPrice: 124999, originalPrice: 149999, rating: 4.9, ratingCount: '1,209', discount: '16% off', img: 'https://images.unsplash.com/photo-1496181130204-7552cc1524e2?w=500&auto=format&fit=crop&q=60', desc: 'High-density computational node running specialized multi-threaded pipeline logic arrays cleanly.', details: 'RAM Hardware: 64GB Unified Logic Blocks | Solid Storage: 2TB Matrix Frame | Graphic Processor: Vector X-100' },
+                { id: 103, category: 'audio', title: 'Acoustic Wave-Field Pods 9', currentPrice: 14999, originalPrice: 19999, rating: 4.6, ratingCount: '14,021', discount: '25% off', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60', desc: 'Perfect phase localization ear modules incorporating real-time mathematical air damping fields.', details: 'Driver Core: 12mm Poly-Titanium | Cancellation Index: 45dB Phase Suppression | Codec: Logic Stream HD' },
+                { id: 104, category: 'appliances', title: 'Inverter Climate Machine Matrix', currentPrice: 42999, originalPrice: 54999, rating: 4.4, ratingCount: '643', discount: '21% off', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&auto=format&fit=crop&q=60', desc: 'Advanced heat extraction pump engineered with structural stabilization frameworks to reduce load drops.', details: 'Volume Vector: 350 Liter Flow Rate | Thermal Cycle: Direct Inverter Sweep | Efficiency Rank: Tier 5 Premium' },
+                { id: 105, category: 'fashion', title: 'Poly-Weave Thermal Compression Core', currentPrice: 3499, originalPrice: 5999, rating: 4.5, ratingCount: '22,910', discount: '41% off', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&auto=format&fit=crop&q=60', desc: 'Tactical performance body lining optimizing moisture evaporation curves under intense production duties.', details: 'Weave Configuration: 80% Polymer Base, 20% Structural Mesh | Guard Rating: Thermal Shield Grade II' },
+                { id: 106, category: 'mobiles', title: 'Vector Node Smart Cell Lite', currentPrice: 24999, originalPrice: 29999, rating: 4.3, ratingCount: '9,112', discount: '16% off', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=60', desc: 'Symmetric communication terminal maximizing grid link aggregation metrics at low consumption points.', details: 'Logic Array Processor: Vector Mid 6 | Internal Space: 128GB Data Block | Grid Antenna: Quad-Band Sector' }
+            ]
+        };
+
+        /* CENTRAL CORE RUNTIME CONTEXT APP INTERNAL STATE MAPPING */
+        const APP_RUNTIME_STATE = {
+            cart: [],
+            wishlist: [],
+            activeFilter: 'all',
+            currentCarouselIndex: 0
+        };
+
+        /* =========================================================================
+           AUTHENTICATION INTERFACE GATEKEEPER VALIDATION MODULE
+           ========================================================================= */
+        function authenticateSecurityPasscodeGateway() {
+            const userInputPasscodeToken = document.getElementById('gatekeeper-passcode-field').value;
+            const errorNotificationToastNode = document.getElementById('gatekeeper-error-log');
+            const loadingCurtainModalNode = document.getElementById('gatekeeper-loading-curtain');
+            
+            // Hardcoded security parameters tracking access tokens
+            if (userInputPasscodeToken === "8075") {
+                errorNotificationToastNode.classList.remove('triggered');
+                loadingCurtainModalNode.classList.add('active');
+                
+                // Simulate deep infrastructure handshake pipeline execution
+                setTimeout(() => {
+                    const masterGatewayWallNode = document.getElementById('security-matrix-wall');
+                    const coreAppEcosystemRootNode = document.getElementById('master-application-ecosystem');
+                    
+                    masterGatewayWallNode.style.opacity = '0';
+                    masterGatewayWallNode.style.visibility = 'hidden';
+                    
+                    coreAppEcosystemRootNode.style.display = 'block';
+                    // Force clean layout pass rendering trigger sequence
+                    setTimeout(() => {
+                        coreAppEcosystemRootNode.style.opacity = '1';
+                        initializeMasterEcosystemComponents();
+                    }, 50);
+                }, 2000);
+            } else {
+                errorNotificationToastNode.classList.add('triggered');
+                document.getElementById('gatekeeper-passcode-field').value = '';
+                setTimeout(() => { errorNotificationToastNode.classList.remove('triggered'); }, 3000);
+            }
+        }
+
+        // Catch enter key events inside lock screen passcode prompt form loops safely
+        document.getElementById('gatekeeper-passcode-field').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') authenticateSecurityPasscodeGateway();
+        });
+
+        /* =========================================================================
+           ECOSYSTEM SYSTEM STABILIZATION COMPONENT INITIALIZATION PIPELINES
+           ========================================================================= */
+        function initializeMasterEcosystemComponents() {
+            renderMasterProductGridShowcase();
+            initializeAmbientCanvasParticles();
+            initializeHardwarePointerTracking();
+            initializeHeroCarouselAutomatedRotation();
+            synchronizeAdministrativeRegistryTable();
+            dispatchToastNotification("Nexus Systems Restored. Security Token Validation Loop Cleared Successfully.");
+        }
+
+        /* Ambient Fluid Canvas Visualizer Processing Algorithm Matrix Loop */
+        function initializeAmbientCanvasParticles() {
+            const trackingCanvasNode = document.getElementById('ambient-particle-space');
+            const calculationContext = trackingCanvasNode.getContext('2d');
+            
+            let structuredNodeArray = [];
+            const targetedCount = 60;
+
+            function configureDimensions() {
+                trackingCanvasNode.width = window.innerWidth;
+                trackingCanvasNode.height = window.innerHeight;
+            }
+            configureDimensions();
+            window.addEventListener('resize', configureDimensions);
+
+            class AmbientNode {
+                constructor() {
+                    this.coordinateX = Math.random() * trackingCanvasNode.width;
+                    this.coordinateY = Math.random() * trackingCanvasNode.height;
+                    this.radiusScale = Math.random() * 2.5 + 1;
+                    this.velocityVectorX = (Math.random() - 0.5) * 0.6;
+                    this.velocityVectorY = (Math.random() - 0.5) * 0.6;
+                }
+                updateAndDrawNode() {
+                    this.coordinateX += this.velocityVectorX;
+                    this.coordinateY += this.velocityVectorY;
+                    
+                    if (this.coordinateX < 0 || this.coordinateX > trackingCanvasNode.width) this.velocityVectorX *= -1;
+                    if (this.coordinateY < 0 || this.coordinateY > trackingCanvasNode.height) this.velocityVectorY *= -1;
+                    
+                    calculationContext.beginPath();
+                    calculationContext.arc(this.coordinateX, this.coordinateY, this.radiusScale, 0, Math.PI * 2);
+                    calculationContext.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(77,142,255,0.15)' : 'rgba(40,116,240,0.1)';
+                    calculationContext.fill();
+                }
+            }
+
+            for(let loopTracker=0; loopTracker<targetedCount; loopTracker++) {
+                structuredNodeArray.push(new AmbientNode());
+            }
+
+            function frameRenderLoopPass() {
+                calculationContext.clearRect(0, 0, trackingCanvasNode.width, trackingCanvasNode.height);
+                structuredNodeArray.forEach(node => node.updateAndDrawNode());
+                requestAnimationFrame(frameRenderLoopPass);
+            }
+            frameRenderLoopPass();
+        }
+
+        /* Custom Interactive Hardware Pointer Mechanics Mapping */
+        function initializeHardwarePointerTracking() {
+            const cursorPrimaryDotNode = document.getElementById('dynamic-hardware-cursor');
+            const cursorHaloRingNode = document.getElementById('dynamic-hardware-cursor-halo');
+
+            window.addEventListener('mousemove', (coordinatesEvent) => {
+                cursorPrimaryDotNode.style.left = `${coordinatesEvent.clientX}px`;
+                cursorPrimaryDotNode.style.top = `${coordinatesEvent.clientY}px`;
+                
+                // Introduce structural micro-lag smoothing metrics via internal coordinate assignment loops
+                cursorHaloRingNode.animate({
+                    left: `${coordinatesEvent.clientX}px`,
+                    top: `${coordinatesEvent.clientY}px`
+                }, { duration: 400, fill: "forwards" });
+            });
+
+            // Bind interactions to change state metrics for custom elements when hovering functional elements
+            document.querySelectorAll('button, a, .category-strip-node-item, .product-card-core').forEach(clickableNode => {
+                clickableNode.addEventListener('mouseenter', () => {
+                    cursorPrimaryDotNode.style.width = '14px'; cursorPrimaryDotNode.style.height = '14px';
+                    cursorHaloRingNode.style.borderColor = 'var(--secondary)';
+                });
+                clickableNode.addEventListener('mouseleave', () => {
+                    cursorPrimaryDotNode.style.width = '8px'; cursorPrimaryDotNode.style.height = '8px';
+                    cursorHaloRingNode.style.borderColor = 'var(--primary)';
+                });
+            });
+        }
+
+        /* Dynamic Document Scroll Track Monitor */
+        window.addEventListener('scroll', () => {
+            const documentVerticalHeightDiff = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const absoluteScrolledTopDistance = window.scrollY;
+            const scrollPercentageRatio = (absoluteScrolledTopDistance / documentVerticalHeightDiff) * 100;
+            document.getElementById('global-scroll-progress-wire').style.width = `${scrollPercentageRatio}%`;
+        });
+
+        /* Automated Rotator Engine For Hero Slider Elements Block */
+        function initializeHeroCarouselAutomatedRotation() {
+            const trackElementNode = document.getElementById('hero-carousel-slider-track');
+            setInterval(() => {
+                APP_RUNTIME_STATE.currentCarouselIndex = (APP_RUNTIME_STATE.currentCarouselIndex + 1) % 3;
+                trackElementNode.style.transform = `translateX(-${APP_RUNTIME_STATE.currentCarouselIndex * 33.3333}%)`;
+            }, 6000);
+        }
+
+        /* =========================================================================
+           CORE CONSUMER PRODUCT CARD ARCHITECTURE GENERATION RENDERING MATRIX
+           ========================================================================= */
+        function renderMasterProductGridShowcase() {
+            const showcaseInjectionTargetNode = document.getElementById('primary-product-injection-matrix');
+            showcaseInjectionTargetNode.innerHTML = '';
+
+            const filteredDataSetArray = MASTER_INVENTORY_DB.products.filter(item => {
+                return APP_RUNTIME_STATE.activeFilter === 'all' || item.category === APP_RUNTIME_STATE.activeFilter;
+            });
+
+            filteredDataSetArray.forEach(item => {
+                const productStructureCardShell = document.createElement('article');
+                productStructureCardShell.className = 'product-card-core';
+                
+                productStructureCardShell.innerHTML = `
+                    <div class="product-card-media-slot">
+                        <span class="card-badge-discount">${item.discount}</span>
+                        <button type="button" class="card-action-wishlist-toggle flex-center" onclick="executeWishlistToggleInterception(${item.id}, event)">❤️</button>
+                        <img src="${item.img}" alt="${item.title}">
+                    </div>
+                    <div class="product-card-info-slot">
+                        <div>
+                            <h4 class="product-title-node">${item.title}</h4>
+                            <p class="product-description-node">${item.desc}</p>
+                            <div class="product-rating-row">
+                                <div class="rating-pill-green">${item.rating} ★</div>
+                                <span class="rating-count-text">(${item.ratingCount} Records)</span>
+                            </div>
+                        </div>
+                        <div class="product-pricing-row">
+                            <span class="price-current-tag">₹${item.currentPrice.toLocaleString('en-IN')}</span>
+                            <span class="price-original-tag">₹${item.originalPrice.toLocaleString('en-IN')}</span>
+                            <span class="price-discount-tag">Active Save</span>
+                        </div>
+                    </div>
+                    <div class="product-card-action-deck">
+                        <button type="button" class="card-btn-secondary" onclick="executeProductQuickviewAssembly(${item.id})">Inspect Specs</button>
+                        <button type="button" class="card-btn-primary" onclick="injectItemIntoActiveCartRegistry(${item.id})">Cache Asset</button>
+                    </div>
+                `;
+                showcaseInjectionTargetNode.appendChild(productStructureCardShell);
+            });
+        }
+
+        function executeProductInventoryFilter(targetedCategoryString) {
+            APP_RUNTIME_STATE.activeFilter = targetedCategoryString;
+            renderMasterProductGridShowcase();
+            dispatchToastNotification(`Product filter targeted configuration mapped: ${targetedCategoryString.toUpperCase()}`);
+        }
+
+        /* =========================================================================
+           USER NAVIGATION PERSPECTIVE MANAGED INTERACTIVE PATH ROUTING LABELS
+           ========================================================================= */
+        function routeToTargetTab(targetedPerspectiveElementId) {
+            document.querySelectorAll('.perspective-view-tab').forEach(paneNode => {
+                paneNode.classList.remove('active-view');
+            });
+            document.getElementById(targetedPerspectiveElementId).classList.add('active-view');
+            
+            if (targetedPerspectiveElementId === 'wishlist-display-perspective') {
+                renderUserWishlistMatrixData();
+            } else if (targetedPerspectiveElementId === 'order-history-perspective') {
+                renderUserShippingLedgerMatrixData();
+            }
+            
+            // Auto smooth shift back up layout vertical metrics view baseline positions
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* =========================================================================
+           USER INTERACTION DATA REGISTRIES HANDLING (CART & WISHLIST PIPELINES)
+           ========================================================================= */
+        function injectItemIntoActiveCartRegistry(productIdNumber) {
+            const resolutionMatchProduct = MASTER_INVENTORY_DB.products.find(p => p.id === productIdNumber);
+            const entryInstanceMatch = APP_RUNTIME_STATE.cart.find(item => item.product.id === productIdNumber);
+
+            if (entryInstanceMatch) {
+                entryInstanceMatch.quantity += 1;
+            } else {
+                APP_RUNTIME_STATE.cart.push({ product: resolutionMatchProduct, quantity: 1 });
+            }
+
+            dispatchToastNotification(`Asset structure recorded in pipeline storage map: ${resolutionMatchProduct.title}`);
+            synchronizeCartUILayoutFeed();
+        }
+
+        function modifyCartItemMetricQuantity(productIdNumber, adjustDeltaInteger) {
+            const entryInstanceMatch = APP_RUNTIME_STATE.cart.find(item => item.product.id === productIdNumber);
+            if (!entryInstanceMatch) return;
+
+            entryInstanceMatch.quantity += adjustDeltaInteger;
+            if (entryInstanceMatch.quantity <= 0) {
+                APP_RUNTIME_STATE.cart = APP_RUNTIME_STATE.cart.filter(item => item.product.id !== productIdNumber);
+                dispatchToastNotification("Asset entry expunged fully from pipeline memory block.");
+            }
+            synchronizeCartUILayoutFeed();
+        }
+
+        function synchronizeCartUILayoutFeed() {
+            const panelContainerNode = document.getElementById('cart-injection-body-target');
+            const totalGrossFieldNode = document.getElementById('cart-summary-gross-val');
+            const totalNetFieldNode = document.getElementById('cart-summary-net-val');
+            const badgeCountNode = document.getElementById('cart-badge-tracker');
+
+            panelContainerNode.innerHTML = '';
+            let integratedAccumulatorValue = 0;
+            let totalItemQuantityCounter = 0;
+
+            APP_RUNTIME_STATE.cart.forEach(item => {
+                totalItemQuantityCounter += item.quantity;
+                const evaluatedPriceBlock = item.product.currentPrice * item.quantity;
+                integratedAccumulatorValue += evaluatedPriceBlock;
+
+                const itemRowElement = document.createElement('div');
+                itemRowElement.className = 'cart-row-item';
+                itemRowElement.innerHTML = `
+                    <img class="cart-row-img-mask" src="${item.product.img}" alt="${item.product.title}">
+                    <div class="cart-row-info">
+                        <span class="cart-row-title">${item.product.title}</span>
+                        <span class="cart-row-price">₹${item.product.currentPrice.toLocaleString('en-IN')}</span>
+                        <div class="cart-quantity-manipulator">
+                            <button class="quantity-adjust-trigger" onclick="modifyCartItemMetricQuantity(${item.product.id}, -1)">-</button>
+                            <span class="quantity-display-node">${item.quantity}</span>
+                            <button class="quantity-adjust-trigger" onclick="modifyCartItemMetricQuantity(${item.product.id}, 1)">+</button>
+                        </div>
+                    </div>
+                `;
+                panelContainerNode.appendChild(itemRowElement);
+            });
+
+            badgeCountNode.innerText = totalItemQuantityCounter;
+            totalGrossFieldNode.innerText = `₹${integratedAccumulatorValue.toLocaleString('en-IN')}`;
+            // Baseline administrative structural deductions math check
+            const netCalculationResult = Math.max(0, integratedAccumulatorValue - 250);
+            totalNetFieldNode.innerText = `₹${netCalculationResult.toLocaleString('en-IN')}`;
+        }
+
+        function executeWishlistToggleInterception(productIdNumber, interactionEventRef) {
+            interactionEventRef.stopPropagation();
+            const targetedAssetInstance = MASTER_INVENTORY_DB.products.find(p => p.id === productIdNumber);
+            
+            if (APP_RUNTIME_STATE.wishlist.includes(productIdNumber)) {
+                APP_RUNTIME_STATE.wishlist = APP_RUNTIME_STATE.wishlist.filter(id => id !== productIdNumber);
+                dispatchToastNotification(`Asset link removed from internal hold structures: ${targetedAssetInstance.title}`);
+            } else {
+                APP_RUNTIME_STATE.wishlist.push(productIdNumber);
+                dispatchToastNotification(`Asset signature routed to high-security reserve vault: ${targetedAssetInstance.title}`);
+            }
+            document.getElementById('wishlist-badge-tracker').innerText = APP_RUNTIME_STATE.wishlist.length;
+        }
+
+        function renderUserWishlistMatrixData() {
+            const wishlistContainerNode = document.getElementById('wishlist-injection-matrix');
+            wishlistContainerNode.innerHTML = '';
+
+            if (APP_RUNTIME_STATE.wishlist.length === 0) {
+                wishlistContainerNode.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:48px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">No active data signatures on hold inside tracking vectors.</div>`;
+                return;
+            }
+
+            const matchedWishlistDataSet = MASTER_INVENTORY_DB.products.filter(p => APP_RUNTIME_STATE.wishlist.includes(p.id));
+            matchedWishlistDataSet.forEach(item => {
+                const productStructureCardShell = document.createElement('article');
+                productStructureCardShell.className = 'product-card-core';
+                productStructureCardShell.innerHTML = `
+                    <div class="product-card-media-slot">
+                        <span class="card-badge-discount">${item.discount}</span>
+                        <button type="button" class="card-action-wishlist-toggle flex-center" onclick="executeWishlistToggleInterception(${item.id}, event); renderUserWishlistMatrixData();">✕</button>
+                        <img src="${item.img}" alt="${item.title}">
+                    </div>
+                    <div class="product-card-info-slot">
+                        <div>
+                            <h4 class="product-title-node">${item.title}</h4>
+                            <div class="product-rating-row">
+                                <div class="rating-pill-green">${item.rating} ★</div>
+                            </div>
+                        </div>
+                        <div class="product-pricing-row">
+                            <span class="price-current-tag">₹${item.currentPrice.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+                    <div class="product-card-action-deck" style="grid-template-columns:1fr;">
+                        <button type="button" class="card-btn-primary" onclick="injectItemIntoActiveCartRegistry(${item.id})">Transfer to Cache Array</button>
+                    </div>
+                `;
+                wishlistContainerNode.appendChild(productStructureCardShell);
+            });
+        }
+
+        /* =========================================================================
+           CHECKOUT ROUTINE LOGISTICS AND SHIPPING LEDGER HISTORY MATRIX PIPELINES
+           ========================================================================= */
+        const ECOSYSTEM_HISTORICAL_SHIPPING_LEDGER = [
+            { trackingId: "NEX-9042-81", description: "Symmetric Processing Core Allocation Package", executionStatus: "IN_TRANSIT_ROUTING", registrationDate: "2026-05-24" },
+            { trackingId: "NEX-2108-44", description: "Phase localized microsonic audio components block", executionStatus: "DELIVERED_VALIDATED", registrationDate: "2026-05-11" }
+        ];
+
+        function executeSimulatedCheckoutRoutine() {
+            if (APP_RUNTIME_STATE.cart.length === 0) {
+                dispatchToastNotification("Compilation Error: Operational buffer cache empty. Cannot route null checkout values.");
+                return;
+            }
+
+            dispatchToastNotification("Compiling secure transaction tokens... Running validation arrays.");
+            
+            setTimeout(() => {
+                APP_RUNTIME_STATE.cart.forEach(item => {
+                    ECOSYSTEM_HISTORICAL_SHIPPING_LEDGER.unshift({
+                        trackingId: `NEX-${Math.floor(Math.random() * 9000 + 1000)}-${Math.floor(Math.random() * 90 + 10)}`,
+                        description: `${item.product.title} (Qty Cluster: ${item.quantity})`,
+                        executionStatus: "INITIALIZED_STAGED",
+                        registrationDate: new Date().toISOString().split('T')[0]
+                    });
+                });
+
+                APP_RUNTIME_STATE.cart = [];
+                synchronizeCartUILayoutFeed();
+                toggleCartPanelSlideout(false);
+                dispatchToastNotification("Ecosystem ledger check verified. Shipping profile assigned to operations feed.");
+                routeToTargetTab('order-history-perspective');
+            }, 1500);
+        }
+
+        function renderUserShippingLedgerMatrixData() {
+            const targetsContainerNode = document.getElementById('shipping-ledger-injection-target');
+            targetsContainerNode.innerHTML = '';
+
+            ECOSYSTEM_HISTORICAL_SHIPPING_LEDGER.forEach(log => {
+                let statusColorTokenString = "var(--primary)";
+                if (log.executionStatus === "DELIVERED_VALIDATED") statusColorTokenString = "var(--accent)";
+                if (log.executionStatus === "INITIALIZED_STAGED") statusColorTokenString = "var(--secondary)";
+
+                const logCardRowNode = document.createElement('div');
+                logCardRowNode.style.cssText = `
+                    background-color: var(--bg-surface); padding: 24px; border-radius: var(--radius-sm);
+                    border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;
+                    box-shadow: var(--shadow-sm);
+                `;
+                logCardRowNode.innerHTML = `
+                    <div>
+                        <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Log Identifier: ${log.trackingId}</div>
+                        <h4 style="font-size:1.05rem; font-weight:700; margin: 4px 0 8px; color:var(--text-main);">${log.description}</h4>
+                        <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Staged Allocation Reference Date: ${log.registrationDate}</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="background:${statusColorTokenString}; color:white; font-size:0.75rem; font-weight:800; padding:6px 14px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px;">${log.executionStatus.replace(/_/g, ' ')}</span>
+                    </div>
+                `;
+                targetsContainerNode.appendChild(logCardRowNode);
+            });
+        }
+
+        /* =========================================================================
+           PRODUCT SPECIFICATIONS STRUCTURAL QUICKVIEW COMPONENT LIGHTBOX INTERFACES
+           ========================================================================= */
+        function executeProductQuickviewAssembly(productIdNumber) {
+            const itemMatchRef = MASTER_INVENTORY_DB.products.find(p => p.id === productIdNumber);
+            const anchorTargetNode = document.getElementById('quickview-injection-anchor');
+
+            anchorTargetNode.innerHTML = `
+                <div class="quickview-image-anchor">
+                    <img id="quickview-zoom-target-node" src="${itemMatchRef.img}" alt="${itemMatchRef.title}" onmousemove="processImageLensMagnify(event)" onmouseleave="resetImageLensMagnify()">
+                </div>
+                <div class="quickview-details-panel">
+                    <div>
+                        <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:8px; color:var(--text-main);">${itemMatchRef.title}</h3>
+                        <div class="product-rating-row" style="margin-bottom:16px;">
+                            <div class="rating-pill-green">${itemMatchRef.rating} ★</div>
+                            <span class="rating-count-text">Metric System Confidence Vector</span>
+                        </div>
+                        <p style="font-size:0.9rem; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">${itemMatchRef.desc}</p>
+                        <div style="background:var(--bg-body); padding:16px; border-radius:var(--radius-sm); font-size:0.8rem; line-height:1.5; border:1px solid var(--border-color); color:var(--text-main);">
+                            <strong>Hardware Architecture Parameters Matrix:</strong><br>
+                            ${itemMatchRef.details.replace(/\|/g, '<br>')}
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; margin-top:24px;">
+                        <button class="action-trigger-btn action-primary" style="flex:1;" onclick="injectItemIntoActiveCartRegistry(${itemMatchRef.id}); togglePortalModalMask('product-quick-view-dialog', false);">Allocate Node</button>
+                        <button class="card-btn-secondary" style="padding:0 24px;" onclick="togglePortalModalMask('product-quick-view-dialog', false)">Dismiss</button>
+                    </div>
+                </div>
+            `;
+            togglePortalModalMask('product-quick-view-dialog', true);
+        }
+
+        /* Technical Interactive Specification Image Magnification System Math */
+        function processImageLensMagnify(mouseMoveEvent) {
+            const targetedImageNode = document.getElementById('quickview-zoom-target-node');
+            const boundingBoxFrame = targetedImageNode.getBoundingClientRect();
+            
+            const positionHorizontalDeltaX = mouseMoveEvent.clientX - boundingBoxFrame.left;
+            const positionVerticalDeltaY = mouseMoveEvent.clientY - boundingBoxFrame.top;
+            
+            const relativePercentX = (positionHorizontalDeltaX / boundingBoxFrame.width) * 100;
+            const relativePercentY = (positionVerticalDeltaY / boundingBoxFrame.height) * 100;
+            
+            targetedImageNode.style.transformOrigin = `${relativePercentX}% ${relativePercentY}%`;
+            targetedImageNode.style.transform = "scale(1.8)";
+        }
+
+        function resetImageLensMagnify() {
+            const targetedImageNode = document.getElementById('quickview-zoom-target-node');
+            targetedImageNode.style.transform = "scale(1)";
+            targetedImageNode.style.transformOrigin = "center center";
+        }
+
+        /* =========================================================================
+           OMNISEARCH COMPILING ENGINE LOGIC RUNTIME FILTER LOOPS
+           ========================================================================= */
+        function evaluateOmnisearchInputSequence(queryStringRawToken) {
+            const suggestionsPanelTargetNode = document.getElementById('omnisearch-autocomplete-results');
+            const processingCleansedToken = queryStringRawToken.toLowerCase().trim();
+
+            if (processingCleansedToken.length === 0) {
+                suggestionsPanelTargetNode.style.display = 'none';
+                return;
+            }
+
+            const linearMatchesArray = MASTER_INVENTORY_DB.products.filter(p => {
+                return p.title.toLowerCase().includes(processingCleansedToken) || p.desc.toLowerCase().includes(processingCleansedToken);
+            });
+
+            suggestionsPanelTargetNode.innerHTML = '';
+            
+            if (linearMatchesArray.length === 0) {
+                suggestionsPanelTargetNode.innerHTML = `<div class="autocomplete-row-item" style="color:var(--text-muted); font-style:italic;">No compatible assets matching target sequence found.</div>`;
+            } else {
+                linearMatchesArray.forEach(match => {
+                    const rowContainerElement = document.createElement('div');
+                    rowContainerElement.className = 'autocomplete-row-item';
+                    rowContainerElement.innerHTML = `<span>🔍</span> <strong>${match.title}</strong> <span style="font-size:0.75rem; color:var(--primary); margin-left:auto;">In ${match.category.toUpperCase()}</span>`;
+                    rowContainerElement.onclick = () => {
+                        document.getElementById('omnisearch-primary-input').value = match.title;
+                        suggestionsPanelTargetNode.style.display = 'none';
+                        executeProductQuickviewAssembly(match.id);
+                    };
+                    suggestionsPanelTargetNode.appendChild(rowContainerElement);
+                });
+            }
+            suggestionsPanelTargetNode.style.display = 'block';
+        }
+
+        /* Automated Voice Assistive Telemetry Simulation Routines */
+        function triggerVoiceAssistanceCaptureMode() {
+            const visualPulseNode = document.getElementById('voice-pulse-node');
+            visualPulseNode.style.display = 'block';
+            dispatchToastNotification("[SYSTEM INTEL WARNING] Streaming channel open. Analyzing structural voice metrics signal loop.");
+
+            setTimeout(() => {
+                visualPulseNode.style.display = 'none';
+                document.getElementById('omnisearch-primary-input').value = "Quantum";
+                evaluateOmnisearchInputSequence("Quantum");
+                dispatchToastNotification("Voice modulation profile processing complete. Sequence string 'Quantum' parsed safely.");
+            }, 2500);
+        }
+
+        /* =========================================================================
+           AI AUTOMATED CONVERSATIONAL LOGIC PROCESSING OVERLAY CAPABILITIES
+           ========================================================================= */
+        function executeAIAssistantComputationalQuery() {
+            const trackingInputFieldNode = document.getElementById('ai-assistant-hud-raw-input');
+            const narrativeLogTargetNode = document.getElementById('ai-assistant-hud-logs-target');
+            const activeInputStringToken = trackingInputFieldNode.value.trim();
+
+            if (activeInputStringToken.length === 0) return;
+
+            const structuredOutgoingLogBubble = document.createElement('div');
+            structuredOutgoingLogBubble.className = 'ai-log-bubble ai-bubble-outgoing';
+            structuredOutgoingLogBubble.innerText = activeInputStringToken;
+            narrativeLogTargetNode.appendChild(structuredOutgoingLogBubble);
+            
+            trackingInputFieldNode.value = '';
+            narrativeLogTargetNode.scrollTop = narrativeLogTargetNode.scrollHeight;
+
+            // Generate responses by matching key tokens inside strings
+            setTimeout(() => {
+                const structuredIncomingLogBubble = document.createElement('div');
+                structuredIncomingLogBubble.className = 'ai-log-bubble ai-bubble-incoming';
+                
+                const parsingTokenMatch = activeInputStringToken.toLowerCase();
+                if (parsingTokenMatch.includes('compute') || parsingTokenMatch.includes('laptop') || parsingTokenMatch.includes('tower')) {
+                    structuredIncomingLogBubble.innerText = "Query optimization match found: Sector computing inventories show steady data streams. AeroBook Pro models carry enhanced vector math modules.";
+                } else if (parsingTokenMatch.includes('discount') || parsingTokenMatch.includes('save') || parsingTokenMatch.includes('coupon')) {
+                    structuredIncomingLogBubble.innerText = "Active operational discount parameter sequence 'NEXTGEN10' resolves cleanly over gross base sums. Input during checkout pass.";
+                } else {
+                    structuredIncomingLogBubble.innerText = "Telemetry request token processed. No explicit mapping matches found inside primary arrays. Broadening systemic search scope across deep indices.";
+                }
+                
+                narrativeLogTargetNode.appendChild(structuredIncomingLogBubble);
+                narrativeLogTargetNode.scrollTop = narrativeLogTargetNode.scrollHeight;
+            }, 1000);
+        }
+
+        /* =========================================================================
+           ENTERPRISE ADMINISTRATIVE DIAGNOSTICS REGISTER RECONCILIATION LOOPS
+           ========================================================================= */
+        function synchronizeAdministrativeRegistryTable() {
+            const tableBodyNode = document.getElementById('admin-panel-table-body-rows');
+            tableBodyNode.innerHTML = '';
+
+            MASTER_INVENTORY_DB.products.forEach(item => {
+                const structuralRowElement = document.createElement('tr');
+                structuralRowElement.style.borderBottom = '1px solid var(--border-color)';
+                structuralRowElement.innerHTML = `
+                    <td style="padding:12px; font-family:monospace; font-weight:700;">#${item.id}</td>
+                    <td style="padding:12px; font-weight:700;">${item.title}</td>
+                    <td style="padding:12px; font-weight:800; color:var(--primary);">₹${item.currentPrice.toLocaleString('en-IN')}</td>
+                    <td style="padding:12px;"><button type="button" style="background:#ff4d4d; color:white; border:none; padding:4px 10px; font-size:0.75rem; font-weight:700; border-radius:var(--radius-sm); cursor:pointer;" onclick="purgeProductFromInventoryRegistry(${item.id})">Purge Registry</button></td>
+                `;
+                tableBodyNode.appendChild(structuralRowElement);
+            });
+        }
+
+        function purgeProductFromInventoryRegistry(productIdNumber) {
+            MASTER_INVENTORY_DB.products = MASTER_INVENTORY_DB.products.filter(p => p.id !== productIdNumber);
+            synchronizeAdministrativeRegistryTable();
+            renderMasterProductGridShowcase();
+            dispatchToastNotification(`Asset signature expunged fully from enterprise registry database mapping: ID #${productIdNumber}`);
+        }
+
+        /* =========================================================================
+           GLOBAL CONTROL TOGGLES MASK INTERFACES OVERLAYS (MODALS & TOASTS)
+           ========================================================================= */
+        function togglePortalModalMask(targetModalElementId, forceVisibilityStateFlag) {
+            const backdropContainerNode = document.getElementById('portal-modal-backdrop-mask');
+            
+            // Loop hide all instances within modal tree architectures cleanly
+            document.getElementById('product-quick-view-dialog').style.display = 'none';
+            document.getElementById('auth-portal-dialog').style.display = 'none';
+            document.getElementById('seller-admin-dashboard-modal').style.display = 'none';
+
+            if (forceVisibilityStateFlag) {
+                backdropContainerNode.style.display = 'flex';
+                document.getElementById(targetModalElementId).style.display = 'block';
+            } else {
+                backdropContainerNode.style.display = 'none';
+            }
+        }
+
+        function dismissAllActiveModals(clickEventRef) {
+            if (clickEventRef.target.id === 'portal-modal-backdrop-mask') {
+                togglePortalModalMask('', false);
+            }
+        }
+
+        function toggleCartPanelSlideout(forceVisibilityStateFlag) {
+            const slideoutContainerNode = document.getElementById('cart-panel-slideout');
+            if (forceVisibilityStateFlag) {
+                slideoutContainerNode.classList.add('active-slideout');
+            } else {
+                slideoutContainerNode.classList.remove('active-slideout');
+            }
+        }
+
+        function toggleAIAssistantHUDDisplay(forceVisibilityStateFlag) {
+            document.getElementById('ai-assistant-hud-window').style.display = forceVisibilityStateFlag ? 'flex' : 'none';
+            document.getElementById('ai-assistant-floating-absolute-trigger').style.display = forceVisibilityStateFlag ? 'none' : 'flex';
+        }
+
+        function toggleAccordionNodeInstance(accordionCardNodeReference) {
+            accordionCardNodeReference.classList.toggle('expanded');
+        }
+
+        function executeThemeInterfaceSkinShift() {
+            const systemTargetRootNode = document.documentElement;
+            const processingCurrentThemeString = systemTargetRootNode.getAttribute('data-theme');
+            const targetedNewThemeString = processingCurrentThemeString === 'dark' ? 'light' : 'dark';
+            
+            systemTargetRootNode.setAttribute('data-theme', targetedNewThemeString);
+            dispatchToastNotification(`Ecosystem theme shift executed: Mapped fully to ${targetedNewThemeString.toUpperCase()} visualization mode templates.`);
+        }
+
+        function dispatchToastNotification(notificationMessageContentText) {
+            const alertDockHubNode = document.getElementById('global-toast-notification-hub');
+            const structuralToastNode = document.createElement('div');
+            structuralToastNode.className = 'toast-notification-node';
+            structuralToastNode.innerHTML = `<span>⚙️</span> <span>${notificationMessageContentText}</span>`;
+            
+            alertDockHubNode.appendChild(structuralToastNode);
+            
+            // Auto schedule extraction sweeps for individual alert rows safely
+            setTimeout(() => {
+                structuralToastNode.style.transform = 'translateX(-150%)';
+                structuralToastNode.style.opacity = '0';
+                setTimeout(() => { structuralToastNode.remove(); }, 400);
+            }, 4500);
+        }
+
+        // Intercept global layout view close operations loops to shut panels down cleanly
+        window.addEventListener('keydown', (keyboardInputEvent) => {
+            if (keyboardInputEvent.key === 'Escape') {
+                togglePortalModalMask('', false);
+                toggleCartPanelSlideout(false);
+                toggleAIAssistantHUDDisplay(false);
+            }
+        });
+    </script>
+</body>
+</html>
